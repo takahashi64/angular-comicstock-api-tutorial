@@ -1,0 +1,10 @@
+div {
+     background-size: 100% auto;
+     background-repeat: no-repeat;
+     background-height:100%;
+}
+
+.thumbnail {
+    max-height: 100%;
+    max-width: 100%;
+}
