@@ -1,3 +1,13 @@
-<a href="#" class="thumbnail">
-	<img [src]="getBackground(issue.thumbnail.pathIncludingExtension)">
-</a>
+<div [ngSwitch]="issueLoaded()">
+	<ng-template [ngSwitchCase]="true">
+		<div (click)="onClick()" class="thumbnail">
+			<img [src]="getBackground(issue.thumbnail.pathIncludingExtension)">
+		</div>
+	</ng-template>
+
+	<ng-template [ngSwitchCase]="false">
+		<div class="thumbnail">
+			<img [src]="getBackground('assets/loading.svg')">
+		</div>
+	</ng-template>
+</div>

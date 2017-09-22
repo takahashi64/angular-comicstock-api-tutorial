@@ -1,19 +1,9 @@
-<div>
-	<div class="row">
-	  <div class="col-sm-4">
+<div class="row" *ngIf="issueIdsExist">
+   <div  *ngFor="let id of issueIds">
+ 
+	   	<div class="col-sm-3">
+	  			<app-tile [issueID]="id">1</app-tile>
 
-		<app-tile>1</app-tile>
-
-	  </div>
-	  	<div class="col-sm-4">
-
-		<app-tile>1</app-tile>
-
-	  </div>
-	 <div class="col-sm-4">
-
-		<app-tile>1</app-tile>
-
-	  </div>
-	</div>
+	  	</div>
+   </div>	
 </div>

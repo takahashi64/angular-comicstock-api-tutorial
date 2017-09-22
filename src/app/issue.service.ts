@@ -1,32 +1,64 @@
 import { Injectable } from '@angular/core';
 import { Issue } from './issue';
+import { Subject }    from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class IssueService {
-	getIssue(): Issue {
-	  	return {
-		    'id': 55529,
-		    'title': 'INVINCIBLE IRON MAN (2015) #8',
-		    'description': '“THE WAR MACHINES” PART 3! Spider-Man, War Machine and Iron Man team up to stop a brand new threat to the Marvel Universe… like only they can. All this plus more hints to next summer’s insane Marvel blockbuster event.',
-		    'seriesNumber': -1,
-		    'publicationDate': '2016-01-14T15:58:19Z',
-		    'publisherId': 0,
-		    'publisher': 'Marvel',
-		    'creators': [],
-		    'stock': [],
-		    'thumbnail': {
-		      'path': 'http://i.annihil.us/u/prod/marvel/i/mg/4/a0/5697c5cd88870',
-		      'extension': 'jpg',
-		      'pathIncludingExtension': 'http://i.annihil.us/u/prod/marvel/i/mg/4/a0/5697c5cd88870.jpg'
-		    },
-		    'images': [
-		      {
-		        'path': 'http://i.annihil.us/u/prod/marvel/i/mg/4/a0/5697c5cd88870',
-		        'extension': 'jpg',
-		        'pathIncludingExtension': 'http://i.annihil.us/u/prod/marvel/i/mg/4/a0/5697c5cd88870.jpg'
-		      }
-		    ]
-		};
-  }
-}
+	private allIssues;
+	private currentIssueDetailSource:  Subject<number>;
+	currentIssueSelected: Observable<number>;
 
+	refreshAllIssuesSource:  Subject<string>;
+	refreshAllIssues: Observable<string>;
+	_allIssuesRefreshed: boolean = false;
+
+	constructor(private http: HttpClient) {
+		this.currentIssueDetailSource = new Subject<number>();
+		this.currentIssueSelected = this.currentIssueDetailSource.asObservable();
+
+		this.refreshAllIssuesSource = new Subject<string>();
+		this.refreshAllIssues = this.refreshAllIssuesSource.asObservable();
+
+		// Make the HTTP request:
+    	this.http.get('http://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
+      		// Read the result field from the JSON response.
+      		let issues: Issue[] = <Issue[]>data;
+
+      		this.allIssues = issues.reduce(function(accumulator, currentValue) {
+			    accumulator[currentValue.id] = currentValue;
+			    return accumulator;
+			}, {});
+
+
+      		console.debug("GO!");
+			this.refreshAllIssuesSource.next("GO");
+			this._allIssuesRefreshed = true;
+    	});
+	}
+
+	allIssuesRefreshed(): boolean {
+		return this._allIssuesRefreshed;
+	}
+
+	setCurrentIssueDetail(id: number) {
+		this.currentIssueDetailSource.next(id);
+	}
+
+	getIssueIds(): string[] {
+		return Object.keys(this.allIssues);
+	}
+
+	getIssue(id: number): Issue {
+	  	
+	  	if (this.allIssues) {
+	  		return this.allIssues[id];
+	  	}
+	  	else
+	  	{
+	  		return undefined
+	  	}
+
+	}
+}
