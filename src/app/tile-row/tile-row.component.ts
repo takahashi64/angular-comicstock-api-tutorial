@@ -20,6 +20,4 @@ export class TileRowComponent implements OnInit {
   ngOnInit() {
   	this.issueService.refreshAllIssues.subscribe(dummy_var => this.issueIds = this.issueService.getIssueIds());
   }
-
-
 }

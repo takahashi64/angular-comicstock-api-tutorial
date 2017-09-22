@@ -1,3 +1,18 @@
-<p *ngIf="currentIssue != undefined">
-	{{ currentIssue.title }}
-</p>
+<span  *ngIf="currentIssue != undefined">
+	
+	<div class="blended side_panel sidenav" [style.background-image]="getBackgroundStyle()">
+		 <div class="text">
+		 	<a href="javascript:void(0)" class="closebtn" (click)="toggleNav()"><span class="glyphicon glyphicon-remove white"></span></a>
+		 	<br>
+			<h3>{{currentIssue.title}}</h3>
+			<p>{{currentIssue.description}}</p>
+
+			<ul class="nav nav-tabs">
+			  <li class="active"><a href="#">Home</a></li>
+			  <li><a href="#">Menu 1</a></li>
+			  <li><a href="#">Menu 2</a></li>
+			  <li><a href="#">Menu 3</a></li>
+			</ul>
+	  	</div> 
+	</div>
+</span>

@@ -12,6 +12,10 @@ export class IssueService {
 
 	refreshAllIssuesSource:  Subject<string>;
 	refreshAllIssues: Observable<string>;
+
+	sidePanelOpenSource:  Subject<boolean>;
+	sidePanelOpen: Observable<boolean>;
+
 	_allIssuesRefreshed: boolean = false;
 
 	constructor(private http: HttpClient) {
@@ -20,6 +24,9 @@ export class IssueService {
 
 		this.refreshAllIssuesSource = new Subject<string>();
 		this.refreshAllIssues = this.refreshAllIssuesSource.asObservable();
+
+		this.sidePanelOpenSource = new Subject<boolean>();
+		this.sidePanelOpen = this.sidePanelOpenSource.asObservable();
 
 		// Make the HTTP request:
     	this.http.get('http://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
@@ -31,8 +38,6 @@ export class IssueService {
 			    return accumulator;
 			}, {});
 
-
-      		console.debug("GO!");
 			this.refreshAllIssuesSource.next("GO");
 			this._allIssuesRefreshed = true;
     	});
@@ -40,6 +45,10 @@ export class IssueService {
 
 	allIssuesRefreshed(): boolean {
 		return this._allIssuesRefreshed;
+	}
+
+	setSidePanelOpen(open: boolean) {
+		this.sidePanelOpenSource.next(open);
 	}
 
 	setCurrentIssueDetail(id: number) {

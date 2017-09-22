@@ -1,13 +1,10 @@
-<div [ngSwitch]="issueLoaded()">
+<div [ngSwitch]="issueLoaded()" >
 	<ng-template [ngSwitchCase]="true">
-		<div (click)="onClick()" class="thumbnail">
-			<img [src]="getBackground(issue.thumbnail.pathIncludingExtension)">
+		
+		<div (click)="onClick()" class="thumbnail" [class.selected]="selected">
+			<img [src]="getIssueURL()"/>
+			<div class="caption" [class.selected]="selected">{{issue.title}}</div>
 		</div>
-	</ng-template>
-
-	<ng-template [ngSwitchCase]="false">
-		<div class="thumbnail">
-			<img [src]="getBackground('assets/loading.svg')">
-		</div>
+		
 	</ng-template>
 </div>

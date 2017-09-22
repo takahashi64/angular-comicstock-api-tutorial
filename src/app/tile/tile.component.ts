@@ -13,13 +13,16 @@ export class TileComponent {
 
   @Input() issueID: number;
   issue: Issue = undefined;
+  selected: boolean = false;
+
 
   constructor(private _sanitizer: DomSanitizer, private issueService: IssueService) { 
      this.issueService.refreshAllIssues.subscribe(dummy_var => this.issue = this.getIssue(this.issueID));
+     this.issueService.currentIssueSelected.subscribe(selected_issue_id => { this.selected = (this.issueID == selected_issue_id) });
   }
 
-  getBackground(image) {
-    return this._sanitizer.bypassSecurityTrustUrl(image);
+  getIssueURL() {
+    return this._sanitizer.bypassSecurityTrustUrl(this.issue.thumbnail.pathIncludingExtension);
   }
 
   issueLoaded() {
@@ -35,5 +38,6 @@ export class TileComponent {
 
   onClick() {
     this.issueService.setCurrentIssueDetail(this.issueID);
+    this.issueService.setSidePanelOpen(true);
   }
 }

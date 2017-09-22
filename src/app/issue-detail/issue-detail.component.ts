@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IssueService } from '../issue.service';
 import { Issue } from '../issue';
+import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-issue-detail',
@@ -10,9 +11,18 @@ import { Issue } from '../issue';
 export class IssueDetailComponent {
 
   currentIssue: Issue = undefined;
+  open: boolean = true;
 
-  constructor(private issueService: IssueService) { 
+  constructor(private issueService: IssueService, private _sanitizer: DomSanitizer) { 
 	this.issueService.currentIssueSelected.subscribe(id => this.currentIssue = this.issueService.getIssue(id));
   }
-  
+
+  getBackgroundStyle() {
+    return this._sanitizer.bypassSecurityTrustStyle("linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('" + this.currentIssue.thumbnail.pathIncludingExtension + "')");
+  }
+
+  toggleNav() {
+  	this.open = !this.open;
+  	this.issueService.setSidePanelOpen(this.open);
+  }
 }
