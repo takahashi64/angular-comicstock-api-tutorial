@@ -1,3 +1,21 @@
-<p>
-  TODO: List of suppliers goes here
-</p>
+<ul>
+  <li *ngFor="let item of allSuppliers | paginate: { itemsPerPage: 10, currentPage: p }"> 
+
+  	<table>
+  		<tr>
+  			<td>Name:</td>
+  			<td>{{item.name}}</td>
+  		</tr>
+  		<tr>
+  			<td>City:</td>
+  			<td>{{item.city}}</td>
+  		</tr>
+  		<tr>
+  			<td>Reference:</td>
+  			<td>{{item.reference}}</td>
+  		</tr>
+  	</table>
+  </li>
+</ul>
+           
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
