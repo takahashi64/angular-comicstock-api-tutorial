@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
 export class IssueDetailComponent {
 
   currentIssue: Issue = undefined;
-  open: boolean = true;
+  open: boolean = false;
 
   constructor(private issueService: IssueService, private _sanitizer: DomSanitizer) { 
 	this.issueService.currentIssueSelected.subscribe(id => this.currentIssue = this.issueService.getIssue(id));
