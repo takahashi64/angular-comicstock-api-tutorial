@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IssueService } from '../issue.service';
 import { Issue } from '../issue';
 import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-browser';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-issue-detail',
