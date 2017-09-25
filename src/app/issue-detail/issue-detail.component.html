@@ -6,13 +6,10 @@
 		 	<br>
 			<h3>{{currentIssue.title}}</h3>
 			<p>{{currentIssue.description}}</p>
-
-			<ul class="nav nav-tabs">
-			  <li class="active"><a href="#">Home</a></li>
-			  <li><a href="#">Menu 1</a></li>
-			  <li><a href="#">Menu 2</a></li>
-			  <li><a href="#">Menu 3</a></li>
-			</ul>
+			<br>
+			<p>Publication Date: {{currentIssue.publicationDate | date}} </p>
+			<br>
+			<button type="button" class="btn btn-success">Order</button>
 	  	</div> 
 	</div>
 </span>
