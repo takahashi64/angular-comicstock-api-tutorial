@@ -28,7 +28,7 @@ export class SuppliersComponent implements OnInit {
 
   ngOnInit() {
   	if (this.supplierService.allSuppliersRefreshed()) {
-  	  this.allSuppliers = this.supplierService.getSuppliers();
+  	  	this.allSuppliers = this.supplierService.getSuppliers();
   	}
   	else 
   	{
