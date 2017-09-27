@@ -19,7 +19,7 @@ export class SupplierService {
 	this.refreshAllSuppliers = this.refreshAllSuppliersSource.asObservable();
 
   	// Make the HTTP request:
-	this.http.get('http://frontendshowcase.azurewebsites.net/api/Suppliers').subscribe(data => {
+	this.http.get('https://frontendshowcase.azurewebsites.net/api/Suppliers').subscribe(data => {
   		// Read the result field from the JSON response.
   		let suppliers =  <Supplier[]>data;
 
@@ -47,8 +47,8 @@ export class SupplierService {
   	headers.set('Content-Type', 'application/json');	
   	// Make the HTTP request:
 
-	this.http.delete(`http://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
-		this.http.put('http://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
+	this.http.delete(`https://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
+		this.http.put('https://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
 			this.allSuppliers[supplier.id] = supplier;
 			this.refreshAllSuppliersSource.next("GO");
 		});
@@ -60,7 +60,7 @@ export class SupplierService {
   	headers.set('Content-Type', 'application/json');	
   	// Make the HTTP request:
 
-	this.http.put('http://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
+	this.http.put('https://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
 		this.allSuppliers[supplier.id] = supplier;
 		this.refreshAllSuppliersSource.next("GO");
 	});
@@ -68,7 +68,7 @@ export class SupplierService {
 
   deleteSupplier(supplier: Supplier) {
   	// Make the HTTP request:
-	this.http.delete(`http://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
+	this.http.delete(`https://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
   		// Read the result field from the JSON response.
   		delete this.allSuppliers[supplier.id];
 		this.refreshAllSuppliersSource.next("GO");

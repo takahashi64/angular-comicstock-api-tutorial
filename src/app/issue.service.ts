@@ -29,7 +29,7 @@ export class IssueService {
 		this.sidePanelOpen = this.sidePanelOpenSource.asObservable();
 
 		// Make the HTTP request:
-    	this.http.get('http://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
+    	this.http.get('https://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
       		// Read the result field from the JSON response.
       		let issues: Issue[] = <Issue[]>data;
 
