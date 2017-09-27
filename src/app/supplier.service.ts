@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Supplier } from './supplier';
 import { Subject }    from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -42,13 +42,36 @@ export class SupplierService {
     return this._allSuppliersRefreshed;
   }
 
+  updateSupplier(supplier: Supplier) {
+	let headers = new HttpHeaders();
+  	headers.set('Content-Type', 'application/json');	
+  	// Make the HTTP request:
+
+	this.http.delete(`http://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
+		this.http.put('http://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
+			this.allSuppliers[supplier.id] = supplier;
+			this.refreshAllSuppliersSource.next("GO");
+		});
+	});
+  }
+
   addSupplier(supplier: Supplier) {
-  	this.allSuppliers[supplier.id] = supplier;
-  	this.refreshAllSuppliersSource.next("GO")
+  	let headers = new HttpHeaders();
+  	headers.set('Content-Type', 'application/json');	
+  	// Make the HTTP request:
+
+	this.http.put('http://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
+		this.allSuppliers[supplier.id] = supplier;
+		this.refreshAllSuppliersSource.next("GO");
+	});
   }
 
   deleteSupplier(supplier: Supplier) {
-  	delete this.allSuppliers[supplier.id];
-  	this.refreshAllSuppliersSource.next("GO")
+  	// Make the HTTP request:
+	this.http.delete(`http://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
+  		// Read the result field from the JSON response.
+  		delete this.allSuppliers[supplier.id];
+		this.refreshAllSuppliersSource.next("GO");
+	});
   }
 }

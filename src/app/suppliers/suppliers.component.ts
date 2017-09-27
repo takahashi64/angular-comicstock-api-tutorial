@@ -70,5 +70,6 @@ export class SuppliersComponent implements OnInit {
   	this.selectedSupplier.name = this.name;
   	this.selectedSupplier.city = this.city;
   	this.selectedSupplier.reference = this.reference;
+  	this.supplierService.updateSupplier(this.selectedSupplier);
   }
 }
