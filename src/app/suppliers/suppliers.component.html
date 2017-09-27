@@ -1,21 +1,116 @@
-<ul>
-  <li *ngFor="let item of allSuppliers | paginate: { itemsPerPage: 10, currentPage: p }"> 
 
-  	<table>
-  		<tr>
-  			<td>Name:</td>
-  			<td>{{item.name}}</td>
-  		</tr>
-  		<tr>
-  			<td>City:</td>
-  			<td>{{item.city}}</td>
-  		</tr>
-  		<tr>
-  			<td>Reference:</td>
-  			<td>{{item.reference}}</td>
-  		</tr>
-  	</table>
-  </li>
-</ul>
-           
-<pagination-controls (pageChange)="p = $event"></pagination-controls>
+<div class="table_content panel">
+
+	<div class="panel-heading clearfix pull-right">
+  
+        <button type="button" class="btn btn-primary btn-sm" (click)="clearSelectedSupplier();openModal(template)">New</button>
+
+		<span class="form-inline">
+			<a href="#" class="btn btn-primary btn-sm">Search</a>
+			<input class="form-control width100" type="text" id="usr" [(ngModel)]="filter">
+		</span>
+    </div>
+
+	<table class="table">
+	<thead>
+	  <tr>
+	    <th>Name</th>
+	    <th>City</th>
+	    <th>Reference</th>
+	    <th></th>
+	    <th></th>
+	  </tr>
+	</thead>
+
+		<tr *ngFor="let item of allSuppliers | SupplierPipe: filter | paginate: { itemsPerPage: 6, currentPage: p }">
+			<td>{{ item.name }}</td>
+			<td>{{ item.city }}</td>
+			<td>{{ item.reference }}</td>
+			<td>
+				<button type="button" class="btn btn-default btn-sm" (click)="setSelectedSupplier(item);openModal(template_delete)">
+	          		<span class="glyphicon glyphicon-trash"></span> 
+	        	</button>
+	       		<button type="button" class="btn btn-default btn-sm" (click)="setSelectedSupplier(item);openModal(template_edit)">
+	          		<span class="glyphicon glyphicon-pencil"></span> 
+	        	</button>
+	       	</td>
+		</tr>
+	</table>
+</div>
+
+
+<div class="paginate panel">
+	<pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
+
+<template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">New Supplier</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+	<form>
+	  <div class="form-group">
+	    <label for="name">Name:</label>
+	    <input type="text" class="form-control" id="name" [(ngModel)]="name" name="name">
+	  </div>
+	  <div class="form-group">
+	    <label for="city">City:</label>
+	    <input type="text" class="form-control" id="city" [(ngModel)]="city" name="city">
+	  </div>
+  	  <div class="form-group">
+	    <label for="ref">Reference:</label>
+	    <input type="text" class="form-control" id="ref" [(ngModel)]="reference" name="ref">
+	  </div>
+	  <button type="button" class="btn btn-primary" (click)="addSupplier();modalRef.hide();">Save</button>
+	  <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>
+	</form>
+  </div>
+</template>
+
+<template #template_edit>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Supplier</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+	<form>
+	  <div class="form-group">
+	    <label for="name">Name:</label>
+	    <input type="text" class="form-control" id="name" [(ngModel)]="name"  name="name">
+	  </div>
+	  <div class="form-group">
+	    <label for="city">City:</label>
+	    <input type="text" class="form-control" id="city" [(ngModel)]="city"  name="city">
+	  </div>
+  	  <div class="form-group">
+	    <label for="ref">Reference:</label>
+	    <input type="text" class="form-control" id="ref" [(ngModel)]="reference" name="ref">
+	  </div>
+	  <button type="button" class="btn btn-primary" (click)="updateSupplier();modalRef.hide();">Save</button>
+	  <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>
+	</form>
+  </div>
+</template>
+
+
+<template #template_delete>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete Supplier?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+	<form>
+	  <p>Are you sure you want to delete this supplier?</p>
+	  <button type="button" class="btn btn-primary" (click)="deleteSupplier();modalRef.hide();">Confirm</button>
+	  <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>
+	</form>
+  </div>
+</template>

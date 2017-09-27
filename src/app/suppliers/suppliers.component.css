@@ -1,0 +1,9 @@
+.paginate  {
+  text-align: center;
+  position: relative;
+}
+
+.table_content {
+	padding: 25px;
+	overflow: scroll;
+} 

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class SupplierService {
 
-  private allSuppliers: Supplier[];
+  private allSuppliers: {};
   private _allSuppliersRefreshed = false;
 
   refreshAllSuppliersSource:  Subject<string>;
@@ -21,13 +21,12 @@ export class SupplierService {
   	// Make the HTTP request:
 	this.http.get('http://frontendshowcase.azurewebsites.net/api/Suppliers').subscribe(data => {
   		// Read the result field from the JSON response.
-  		//let suppliers: Supplier[] = <Supplier[]>data;
+  		let suppliers =  <Supplier[]>data;
 
-  		//this.allSuppliers = suppliers.reduce(function(accumulator, currentValue) {
-		//    accumulator[currentValue.id] = currentValue;
-		//    return accumulator;
-		//}, {});
-		this.allSuppliers =  <Supplier[]>data;
+  		this.allSuppliers = suppliers.reduce(function(accumulator, currentValue) {
+		    accumulator[currentValue.id] = currentValue;
+		    return accumulator;
+		}, {});
 
 		//this.refreshAllIssuesSource.next("GO");
 		this._allSuppliersRefreshed = true;
@@ -36,10 +35,20 @@ export class SupplierService {
   }
 
   getSuppliers(): Supplier[] {
-	return this.allSuppliers;	
+	return <Supplier[]>Object.values(this.allSuppliers);	
   }
 
   allSuppliersRefreshed(): boolean {
     return this._allSuppliersRefreshed;
+  }
+
+  addSupplier(supplier: Supplier) {
+  	this.allSuppliers[supplier.id] = supplier;
+  	this.refreshAllSuppliersSource.next("GO")
+  }
+
+  deleteSupplier(supplier: Supplier) {
+  	delete this.allSuppliers[supplier.id];
+  	this.refreshAllSuppliersSource.next("GO")
   }
 }

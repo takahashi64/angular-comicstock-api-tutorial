@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { TileComponent } from './tile/tile.component';
 import { TileRowComponent } from './tile-row/tile-row.component';
 import { TooltipModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { Issue } from './issue';
 import { IssueService } from './issue.service';
 import { SupplierService } from './supplier.service';
@@ -14,6 +15,9 @@ import { SuppliersComponent } from './suppliers/suppliers.component';
 import { IssueDetailComponent } from './issue-detail/issue-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination'; 
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { FormsModule } from '@angular/forms';
+import { SupplierPipe } from './supplier.pipe';
 
 const appRoutes: Routes = [
   { path: 'issues', component: IssuesComponent },
@@ -30,7 +34,10 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     ),
     HttpClientModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ModalModule.forRoot(),
+    FormsModule,
+    CommonModule
   ],
   declarations: [
     AppComponent,
@@ -38,9 +45,10 @@ const appRoutes: Routes = [
     TileRowComponent,
     IssuesComponent,
     SuppliersComponent,
-    IssueDetailComponent
+    IssueDetailComponent,
+    SupplierPipe
   ],
-  providers: [IssueService, SupplierService ],
+  providers: [IssueService, SupplierService, BsModalService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

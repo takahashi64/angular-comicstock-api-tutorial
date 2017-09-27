@@ -1,6 +1,3 @@
 export class Supplier {
- 	id: number;
-	name: string;
-	city: string;
-	reference: string;
+	constructor(public id: number, public name: string, public city: string, public reference: string) {}
 }
