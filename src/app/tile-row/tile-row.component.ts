@@ -37,6 +37,6 @@ export class TileRowComponent implements OnInit {
   }
 
   onScroll () {
-    this.issueService.fetchMoreIssues();
+    this.issueService.fetchMoreIssuesSync();
   }
 }

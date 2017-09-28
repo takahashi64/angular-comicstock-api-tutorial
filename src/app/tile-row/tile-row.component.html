@@ -1,13 +1,20 @@
 <div *ngIf="issueIdsExist()">
 	<div
 	    infiniteScroll
-	    [infiniteScrollDistance]="2"
-	    [infiniteScrollThrottle]="100"
+	    [infiniteScrollDistance]="3"
+	    [infiniteScrollThrottle]="500"
 	    (scrolled)="onScroll()">
 	
 		<div *ngFor="let row of issueIdsGrid(); let i = index" [attr.data-index]="i">
 			<div class="container">
+
 				<div class="row" id="issue_detail_{{ i }}">
+					<div class="col-sm-12">
+						<app-issue-detail [rowNumber]="i"></app-issue-detail>
+					</div>
+				</div>
+
+				<div class="row">
 				   
 				   <div *ngFor="let id of row">
 					   	<div  class="col-sm-2">
@@ -16,11 +23,7 @@
 				   </div>	
 				</div>
 				
-				<div class="row">
-					<div class="col-sm-12">
-						<app-issue-detail [rowNumber]="i"></app-issue-detail>
-					</div>
-				</div>
+
 		</div>
 
 	</div>

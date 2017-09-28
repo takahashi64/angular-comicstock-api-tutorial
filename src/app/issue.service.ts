@@ -35,40 +35,42 @@ export class IssueService {
 		this.sidePanelOpenSource = new Subject<{}>();
 		this.sidePanelOpen = this.sidePanelOpenSource.asObservable();
 
-		this.fetchMoreIssues();
-		this.fetchMoreIssues();
-		this.fetchMoreIssues();
-		this.fetchMoreIssues();
+		this.fetchMoreIssuesSync();
+		this.fetchMoreIssuesSync();
+		this.fetchMoreIssuesSync();
+		this.fetchMoreIssuesSync();
+	}
+
+	fetchMoreIssuesSync() {
+		if (!this.fetchingIssues) {
+			this.fetchingIssues = true;
+			this.fetchMoreIssues();
+			this.fetchingIssues = false;
+		}
+		else {
+			setTimeout(() => {this.fetchMoreIssuesSync()} , 500);
+		}
 	}
 
 	fetchMoreIssues() {
-		if (!this.fetchingIssues) {
-			this.fetchingIssues = true;
+    	let allTheIssues = this.allIssues;
 
-	    	let allTheIssues = this.allIssues;
+    	this.http.get('https://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
+      		// Read the result field from the JSON response.
+      		let issues = ((<Issue[]>data).filter( function(issue) { 
+      				return (allTheIssues[issue.id.toString()] == undefined) && (issue.thumbnail.pathIncludingExtension.indexOf("image_not_available") == -1)
+      			}))
+      			.reduce(function(accumulator, currentValue) {
+				    accumulator[currentValue.id] = currentValue;
+				    return accumulator;
+				}, {});
 
-	    	this.http.get('https://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
-	      		// Read the result field from the JSON response.
-	      		let issues = ((<Issue[]>data).filter( function(issue) { 
-	      				return (allTheIssues[issue.id.toString()] == undefined) && (issue.thumbnail.pathIncludingExtension.indexOf("image_not_available") == -1)
-	      			}))
-	      			.reduce(function(accumulator, currentValue) {
-					    accumulator[currentValue.id] = currentValue;
-					    return accumulator;
-					}, {});
+      		this.allIssueIds = this.allIssueIds.concat(Object.keys(issues));
+      		this.allIssues = Object.assign({}, issues, this.allIssues);
 
-	      		this.allIssueIds = this.allIssueIds.concat(Object.keys(issues));
-	      		this.allIssues = Object.assign({}, issues, this.allIssues);
-
-				this.refreshAllIssuesSource.next("GO");
-				this._allIssuesRefreshed = true;
-				this.fetchingIssues = false;
-	    	});
-		}
-		else 
-		{
-			setTimeout(() => {this.fetchMoreIssues()} , 1000);
-		}
+			this.refreshAllIssuesSource.next("GO");
+			this._allIssuesRefreshed = true;
+    	});
 	}
 
 	allIssuesRefreshed(): boolean {

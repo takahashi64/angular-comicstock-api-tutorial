@@ -27,7 +27,7 @@ export class IssueDetailComponent {
 	  this.issueService.sidePanelOpen.subscribe(data => {
       this.open = (data['open'] && data['rowNumber'] == this.rowNumber);
       if (this.open) {
-        this.simplePageScrollService.scrollToElement("#issue_detail_" + this.rowNumber , 0);
+        this.simplePageScrollService.scrollToElement("#issue_detail_" + this.rowNumber , -200);
       }
     });
 
@@ -36,6 +36,10 @@ export class IssueDetailComponent {
     if (this.currentIssue == undefined) {
       this.currentIssue = this.issueService.getCurrentIssueDetail();
     }
+  }
+
+  sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
   }
 
   getBackgroundStyle() {
