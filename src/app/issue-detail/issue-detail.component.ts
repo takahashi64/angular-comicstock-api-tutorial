@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input} from '@angular/core';
 import { IssueService } from '../issue.service';
 import { Issue } from '../issue';
 import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-browser';
@@ -13,6 +13,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 })
 export class IssueDetailComponent {
 
+  @Input() rowNumber: number;
   currentIssue: Issue = undefined;
   open: boolean = false;
   modalRef: BsModalRef;
@@ -22,16 +23,26 @@ export class IssueDetailComponent {
   quantity_poor: number = 0;
 
   constructor(private issueService: IssueService, private _sanitizer: DomSanitizer,  private modalService: BsModalService) { 
-	  this.issueService.currentIssueSelected.subscribe(id => this.currentIssue = this.issueService.getIssue(id));
+	  this.issueService.sidePanelOpen.subscribe(data => { this.open = (data['open'] && data['rowNumber'] == this.rowNumber)});
+
+    this.issueService.currentIssueSelected.subscribe(id => {this.currentIssue = this.issueService.getIssue(id)});
+    
+    if (this.currentIssue == undefined) {
+      this.currentIssue = this.issueService.getCurrentIssueDetail();
+    }
   }
 
   getBackgroundStyle() {
     return this._sanitizer.bypassSecurityTrustStyle("linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('" + this.currentIssue.thumbnail.pathIncludingExtension + "')");
   }
 
+  isOpen() {
+    return this.issueService.getSidePanelOpen(this.rowNumber);
+  }
+
   toggleNav() {
-  	this.open = !this.open;
-  	this.issueService.setSidePanelOpen(this.open);
+  	this.open = false;
+  	this.issueService.setSidePanelOpen(this.open, this.rowNumber);
   }
 
   openModal(template: TemplateRef<any>) {

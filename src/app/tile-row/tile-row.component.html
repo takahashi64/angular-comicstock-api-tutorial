@@ -1,10 +1,19 @@
-
-	<div class="row" *ngIf="issueIdsExist">
-	   <div  *ngFor="let id of issueIds">
-	 
-		   	<div class="col-sm-3">
-		  			<app-tile [issueID]="id">1</app-tile>
-
-		  	</div>
-	   </div>	
+<div *ngIf="issueIdsExist()">
+	<div *ngFor="let row of issueIdsGrid(); let i = index" [attr.data-index]="i">
+		<div class="container">
+			<div class="row">
+			   
+			   <div *ngFor="let id of row">
+				   	<div  class="col-sm-2">
+				  		<app-tile [issueID]="id" [rowNumber]="i">1</app-tile>
+				  	</div>
+			   </div>	
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<app-issue-detail [rowNumber]="i"></app-issue-detail>
+				</div>
+			</div>
 	</div>
+</div>

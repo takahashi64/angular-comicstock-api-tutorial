@@ -8,10 +8,5 @@ import { IssueService } from '../issue.service';
 })
 export class IssuesComponent {
 
-  sidePanelOpen: boolean = false;
-
-  constructor(private issueService: IssueService) { 
-	this.issueService.sidePanelOpen.subscribe(open => this.sidePanelOpen = open);
-  }
-
+ 
 }

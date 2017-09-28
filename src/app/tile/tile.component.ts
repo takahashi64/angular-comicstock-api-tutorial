@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { Issue } from '../issue';
 import { IssueService } from '../issue.service';
-import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-tile',
@@ -10,11 +9,10 @@ import { Input } from '@angular/core';
   styleUrls: ['./tile.component.css']
 })
 export class TileComponent {
-
+  @Input() rowNumber: number;
   @Input() issueID: number;
   issue: Issue = undefined;
   selected: boolean = false;
-
 
   constructor(private _sanitizer: DomSanitizer, private issueService: IssueService) { 
      this.issueService.refreshAllIssues.subscribe(dummy_var => this.issue = this.getIssue(this.issueID));
@@ -38,6 +36,6 @@ export class TileComponent {
 
   onClick() {
     this.issueService.setCurrentIssueDetail(this.issueID);
-    this.issueService.setSidePanelOpen(true);
+    this.issueService.setSidePanelOpen(true, this.rowNumber);
   }
 }

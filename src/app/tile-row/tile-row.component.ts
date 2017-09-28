@@ -10,20 +10,29 @@ import { IssueService } from '../issue.service';
 export class TileRowComponent implements OnInit { 
 
   issueIds: string[];
+  itemsPerRow: number = 6;
 
-  constructor(private issueService: IssueService) { }
+  constructor(private issueService: IssueService) {}
 
   issueIdsExist() {
   	return this.issueIds != undefined && Object.keys(this.issueIds).length > 0;
+  }
+
+  issueIdsGrid(): string[][] {
+    let result = [];
+    let numRows = Math.ceil(this.issueIds.length / this.itemsPerRow);
+
+    for (let i = 0; i < numRows; i++) {
+      result[i] = this.issueIds.slice(0).splice(i * this.itemsPerRow, this.itemsPerRow);
+    }
+
+    return result;
   }
 
   ngOnInit() {
   	if (this.issueService.allIssuesRefreshed()) {
   		this.issueIds = this.issueService.getIssueIds();
   	}
-  	else
-  	{
-  		this.issueService.refreshAllIssues.subscribe(dummy_var => this.issueIds = this.issueService.getIssueIds());
-  	}
+  	this.issueService.refreshAllIssues.subscribe(dummy_var => this.issueIds = this.issueService.getIssueIds());
   }
 }
