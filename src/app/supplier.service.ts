@@ -15,27 +15,27 @@ export class SupplierService {
 
   constructor(private http: HttpClient) {
 
-  	this.refreshAllSuppliersSource = new Subject<string>();
-	this.refreshAllSuppliers = this.refreshAllSuppliersSource.asObservable();
+    this.refreshAllSuppliersSource = new Subject<string>();
+  	this.refreshAllSuppliers = this.refreshAllSuppliersSource.asObservable();
 
-  	// Make the HTTP request:
-	this.http.get('https://frontendshowcase.azurewebsites.net/api/Suppliers').subscribe(data => {
-  		// Read the result field from the JSON response.
-  		let suppliers =  <Supplier[]>data;
+    	// Make the HTTP request:
+  	this.http.get('https://frontendshowcase.azurewebsites.net/api/Suppliers').subscribe(data => {
+    		// Read the result field from the JSON response.
+    		let suppliers =  <Supplier[]>data;
 
-  		this.allSuppliers = suppliers.reduce(function(accumulator, currentValue) {
-		    accumulator[currentValue.id] = currentValue;
-		    return accumulator;
-		}, {});
+    		this.allSuppliers = suppliers.reduce(function(accumulator, currentValue) {
+  		    accumulator[currentValue.id] = currentValue;
+  		    return accumulator;
+  		}, {});
 
-		//this.refreshAllIssuesSource.next("GO");
-		this._allSuppliersRefreshed = true;
-		this.refreshAllSuppliersSource.next("GO");
-	});
+  		//this.refreshAllIssuesSource.next("GO");
+  		this._allSuppliersRefreshed = true;
+  		this.refreshAllSuppliersSource.next("GO");
+  	});
   }
 
   getSuppliers(): Supplier[] {
-	return <Supplier[]>Object.values(this.allSuppliers);	
+	  return <Supplier[]>Object.values(this.allSuppliers);	
   }
 
   allSuppliersRefreshed(): boolean {
@@ -43,16 +43,16 @@ export class SupplierService {
   }
 
   updateSupplier(supplier: Supplier) {
-	let headers = new HttpHeaders();
-  	headers.set('Content-Type', 'application/json');	
-  	// Make the HTTP request:
+  	let headers = new HttpHeaders();
+    	headers.set('Content-Type', 'application/json');	
+    	// Make the HTTP request:
 
-	this.http.delete(`https://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
-		this.http.put('https://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
-			this.allSuppliers[supplier.id] = supplier;
-			this.refreshAllSuppliersSource.next("GO");
-		});
-	});
+  	this.http.delete(`https://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
+  		this.http.put('https://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
+  			this.allSuppliers[supplier.id] = supplier;
+  			this.refreshAllSuppliersSource.next("GO");
+  		});
+  	});
   }
 
   addSupplier(supplier: Supplier) {

@@ -15,7 +15,7 @@ export class TileRowComponent implements OnInit {
   constructor(private issueService: IssueService) {}
 
   issueIdsExist() {
-  	return this.issueIds != undefined && Object.keys(this.issueIds).length > 0;
+  	return this.issueIds != undefined && this.issueIds.length > 0;
   }
 
   issueIdsGrid(): string[][] {
@@ -34,5 +34,9 @@ export class TileRowComponent implements OnInit {
   		this.issueIds = this.issueService.getIssueIds();
   	}
   	this.issueService.refreshAllIssues.subscribe(dummy_var => this.issueIds = this.issueService.getIssueIds());
+  }
+
+  onScroll () {
+    this.issueService.fetchMoreIssues();
   }
 }

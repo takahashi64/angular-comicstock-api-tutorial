@@ -6,7 +6,9 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class IssueService {
-	private allIssues;
+	private allIssues = {};
+	private allIssueIds: string[] = [];
+
 	private currentIssueDetailSource:  Subject<number>;
 	currentIssueSelected: Observable<number>;
 	currentIssueSelectedId: number;
@@ -18,6 +20,10 @@ export class IssueService {
 
 	_allIssuesRefreshed: boolean = false;
 	sidePanelOpenByRow = {}
+
+	fetchingIssues = false;
+
+	fetchMoreIssuesQueuedCalls: number = 0
 
 	constructor(private http: HttpClient) {
 		this.currentIssueDetailSource = new Subject<number>();
@@ -31,22 +37,38 @@ export class IssueService {
 
 		this.fetchMoreIssues();
 		this.fetchMoreIssues();
+		this.fetchMoreIssues();
+		this.fetchMoreIssues();
 	}
 
 	fetchMoreIssues() {
-			// Make the HTTP request:
-    	this.http.get('https://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
-      		// Read the result field from the JSON response.
-      		let issues = (<Issue[]>data).reduce(function(accumulator, currentValue) {
-			    accumulator[currentValue.id] = currentValue;
-			    return accumulator;
-			}, {});
+		if (!this.fetchingIssues) {
+			this.fetchingIssues = true;
 
-      		this.allIssues = Object.assign({}, issues, this.allIssues);
+	    	let allTheIssues = this.allIssues;
 
-			this.refreshAllIssuesSource.next("GO");
-			this._allIssuesRefreshed = true;
-    	});
+	    	this.http.get('https://frontendshowcase.azurewebsites.net/api/Issues').subscribe(data => {
+	      		// Read the result field from the JSON response.
+	      		let issues = ((<Issue[]>data).filter( function(issue) { 
+	      				return (allTheIssues[issue.id.toString()] == undefined) && (issue.thumbnail.pathIncludingExtension.indexOf("image_not_available") == -1)
+	      			}))
+	      			.reduce(function(accumulator, currentValue) {
+					    accumulator[currentValue.id] = currentValue;
+					    return accumulator;
+					}, {});
+
+	      		this.allIssueIds = this.allIssueIds.concat(Object.keys(issues));
+	      		this.allIssues = Object.assign({}, issues, this.allIssues);
+
+				this.refreshAllIssuesSource.next("GO");
+				this._allIssuesRefreshed = true;
+				this.fetchingIssues = false;
+	    	});
+		}
+		else 
+		{
+			setTimeout(() => {this.fetchMoreIssues()} , 1000);
+		}
 	}
 
 	allIssuesRefreshed(): boolean {
@@ -73,7 +95,7 @@ export class IssueService {
 	}
 
 	getIssueIds(): string[] {
-		return Object.keys(this.allIssues);
+		return this.allIssueIds;
 	}
 
 	getIssue(id: number): Issue {

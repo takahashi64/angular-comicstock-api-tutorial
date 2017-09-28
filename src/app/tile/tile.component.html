@@ -1,10 +1,6 @@
 <div [ngSwitch]="issueLoaded()" >
-	<ng-template [ngSwitchCase]="true">
-		
-		<div (click)="onClick()" class="thumbnail" [class.selected]="selected">
-			<img [src]="getIssueURL()"/>
-			<div class="caption" [class.selected]="selected">{{issue.title}}</div>
-		</div>
-		
-	</ng-template>
+	<div (click)="onClick()" class="thumbnail" [class.selected]="selected">
+		<img [src]="getIssueURL()"/>
+		<div class="caption" [class.selected]="selected">{{issue.title}}</div>
+	</div>
 </div>

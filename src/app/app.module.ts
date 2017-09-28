@@ -19,6 +19,7 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { SupplierPipe } from './supplier.pipe';
 import { Ng2SimplePageScrollModule } from 'ng2-simple-page-scroll'
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 const appRoutes: Routes = [
   { path: 'issues', component: IssuesComponent },
@@ -39,7 +40,8 @@ const appRoutes: Routes = [
     ModalModule.forRoot(),
     FormsModule,
     CommonModule,
-    Ng2SimplePageScrollModule.forRoot()
+    Ng2SimplePageScrollModule.forRoot(),
+    InfiniteScrollModule
   ],
   declarations: [
     AppComponent,

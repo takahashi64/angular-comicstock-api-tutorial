@@ -26,6 +26,7 @@
     "jquery": "^3.2.1",
     "ng2-simple-page-scroll": "^2.0.0",
     "ngx-bootstrap": "^1.9.3",
+    "ngx-infinite-scroll": "^0.5.2",
     "ngx-pagination": "^3.0.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
