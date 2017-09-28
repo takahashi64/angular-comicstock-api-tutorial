@@ -18,6 +18,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { SupplierPipe } from './supplier.pipe';
+import { Ng2SimplePageScrollModule } from 'ng2-simple-page-scroll'
 
 const appRoutes: Routes = [
   { path: 'issues', component: IssuesComponent },
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
     NgxPaginationModule,
     ModalModule.forRoot(),
     FormsModule,
-    CommonModule
+    CommonModule,
+    Ng2SimplePageScrollModule.forRoot()
   ],
   declarations: [
     AppComponent,

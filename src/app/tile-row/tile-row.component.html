@@ -1,7 +1,7 @@
 <div *ngIf="issueIdsExist()">
 	<div *ngFor="let row of issueIdsGrid(); let i = index" [attr.data-index]="i">
 		<div class="container">
-			<div class="row">
+			<div class="row" id="issue_detail_{{ i }}">
 			   
 			   <div *ngFor="let id of row">
 				   	<div  class="col-sm-2">

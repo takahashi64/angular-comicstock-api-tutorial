@@ -5,6 +5,7 @@ import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-brow
 import { DatePipe } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { SimplePageScrollService } from 'ng2-simple-page-scroll'
 
 @Component({
   selector: 'app-issue-detail',
@@ -22,8 +23,13 @@ export class IssueDetailComponent {
   quantity_good: number = 0;
   quantity_poor: number = 0;
 
-  constructor(private issueService: IssueService, private _sanitizer: DomSanitizer,  private modalService: BsModalService) { 
-	  this.issueService.sidePanelOpen.subscribe(data => { this.open = (data['open'] && data['rowNumber'] == this.rowNumber)});
+  constructor(private issueService: IssueService, private _sanitizer: DomSanitizer,  private modalService: BsModalService, private simplePageScrollService: SimplePageScrollService) { 
+	  this.issueService.sidePanelOpen.subscribe(data => {
+      this.open = (data['open'] && data['rowNumber'] == this.rowNumber);
+      if (this.open) {
+        this.simplePageScrollService.scrollToElement("#issue_detail_" + this.rowNumber , 0);
+      }
+    });
 
     this.issueService.currentIssueSelected.subscribe(id => {this.currentIssue = this.issueService.getIssue(id)});
     
