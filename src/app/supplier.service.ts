@@ -4,6 +4,8 @@ import { Supplier } from './supplier';
 import { Subject }    from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
+const baseUrl = 'https://frontendshowcase.azurewebsites.net/api/Suppliers';
+
 @Injectable()
 export class SupplierService {
 
@@ -12,14 +14,14 @@ export class SupplierService {
 
   refreshAllSuppliersSource:  Subject<string>;
   refreshAllSuppliers: Observable<string>;
-
+ 
   constructor(private http: HttpClient) {
 
     this.refreshAllSuppliersSource = new Subject<string>();
   	this.refreshAllSuppliers = this.refreshAllSuppliersSource.asObservable();
 
     	// Make the HTTP request:
-  	this.http.get('https://frontendshowcase.azurewebsites.net/api/Suppliers').subscribe(data => {
+  	this.http.get(baseUrl).subscribe(data => {
     		// Read the result field from the JSON response.
     		let suppliers =  <Supplier[]>data;
 
@@ -47,8 +49,8 @@ export class SupplierService {
     	headers.set('Content-Type', 'application/json');	
     	// Make the HTTP request:
 
-  	this.http.delete(`https://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
-  		this.http.put('https://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
+  	this.http.delete(`${baseUrl}/${supplier.id}`).subscribe(data => {
+  		this.http.put(baseUrl, supplier, {headers: headers}).subscribe(data => {
   			this.allSuppliers[supplier.id] = supplier;
   			this.refreshAllSuppliersSource.next("GO");
   		});
@@ -60,18 +62,18 @@ export class SupplierService {
   	headers.set('Content-Type', 'application/json');	
   	// Make the HTTP request:
 
-	this.http.put('https://frontendshowcase.azurewebsites.net/api/Suppliers', supplier, {headers: headers}).subscribe(data => {
-		this.allSuppliers[supplier.id] = supplier;
-		this.refreshAllSuppliersSource.next("GO");
-	});
+  	this.http.put(baseUrl, supplier, {headers: headers}).subscribe(data => {
+  		this.allSuppliers[supplier.id] = supplier;
+  		this.refreshAllSuppliersSource.next("GO");
+  	});
   }
 
   deleteSupplier(supplier: Supplier) {
   	// Make the HTTP request:
-	this.http.delete(`https://frontendshowcase.azurewebsites.net/api/Suppliers/${supplier.id}`).subscribe(data => {
-  		// Read the result field from the JSON response.
-  		delete this.allSuppliers[supplier.id];
-		this.refreshAllSuppliersSource.next("GO");
-	});
+  	this.http.delete(`${baseUrl}/${supplier.id}`).subscribe(data => {
+    		// Read the result field from the JSON response.
+    		delete this.allSuppliers[supplier.id];
+  		this.refreshAllSuppliersSource.next("GO");
+  	});
   }
 }
